@@ -1,0 +1,9 @@
+---
+
+- name: Update shell prompt
+  hosts: hosts
+  connection: ssh
+  roles:
+    # Validate
+    - { role: cli_validation, tags: ['always'] }
+    - { role: shell, tags: ['always'] }

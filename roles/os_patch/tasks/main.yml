@@ -1,0 +1,4 @@
+---
+
+- include_tasks: "{{ patch_action }}.yml"
+  when: patch_enabled is true

@@ -1,0 +1,15 @@
+---
+
+dns_operator: localhost
+dns_server: 1.2.3.4 # replace with valid DNS nsupdate server
+dns_zone: openstack.cloud.democluster.dev
+dns_ttl: 7200
+dns_state: present
+dns_default_type: A
+dns_forward_records: []
+dns_reverse_records: []
+
+nsupdate_secrets:
+  key: cloud.team.dev
+  algorithm: hmac-sha512
+  secret: "" # TODO: vault-me!

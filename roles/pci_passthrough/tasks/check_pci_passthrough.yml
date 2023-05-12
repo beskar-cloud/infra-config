@@ -1,0 +1,10 @@
+---
+
+- name: Check PCI passthrough after reboot
+  become: true
+  ansible.builtin.shell: |
+    dmesg | grep -i -e DMAR -e IOMMU
+  register: pci_passthrough_after_reboot
+  changed_when: false
+  failed_when: pci_passthrough_after_reboot.rc > 0
+  when: (machine_role is defined) and ("pci_passthrough" in machine_role)

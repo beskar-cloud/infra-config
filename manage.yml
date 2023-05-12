@@ -1,0 +1,16 @@
+---
+
+- name: Manage hypervisors
+  hosts: hosts
+  roles:
+    # Validate
+    - { role: cli_validation, tags: ['always'] }
+    - { role: hw_deployment, tags: ['never', 'hw-deployment'], become: true }
+    - { role: ssh_keys, tags: ['never', 'hw-deployment']}
+    - { role: networking, tags: ['never', 'network', 'hw-deployment'] }
+    - { role: install_packages, tags: ['never', 'install-packages', 'hw-deployment'] }
+    - { role: unattended_upgrades, tags: ['never', 'hw-deployment', 'unattended-upgrades'] }
+    - { role: hostname, tags: ['never', 'hw-deployment', 'hostname']}
+    - { role: systemd_timesyncd, tags: ['never', 'hw-deployment', 'ntp']}
+    - { role: hosts_file, tags: ['never', 'hw-deployment', 'hosts-file']}
+    - { role: shell, tags: ['never'] }

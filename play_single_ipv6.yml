@@ -1,0 +1,9 @@
+---
+
+- name: Configure/disable ipv6
+  hosts: hosts
+  connection: ssh
+  roles:
+    # Validate
+    - { role: cli_validation, tags: ['always'] }
+    - { role: ipv6, tags: ['always'] }

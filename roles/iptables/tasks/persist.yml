@@ -1,0 +1,29 @@
+---
+
+- name: Configure iptables-persistent for infra-config-input-firewall
+  become: true
+  block:
+    - name: Install iptables-persistent
+      ansible.builtin.apt:
+        name: iptables-persistent
+        state: "{{ ensure_state }}"
+
+    - name: Save IPv4 infra-config-input-firewall chain
+      ansible.builtin.shell: iptables-save -t filter | grep -E "^\*filter$|infra-config-input-firewall|^COMMIT$|^# Completed on.*" > {{ iptables4_save_file }}
+      when: ensure_state == "present"
+
+    - name: Drop IPv4 iptables persistent rules
+      ansible.builtin.file:
+        path: "{{ iptables4_save_file }}"
+        state: absent
+      when: ensure_state == "absent"
+
+    - name: Save IPv6 infra-config-input-firewall chain
+      ansible.builtin.shell: ip6tables-save -t filter | grep -E "^\*filter$|infra-config-input-firewall|^COMMIT$|^# Completed on.*" > {{ iptables6_save_file }}
+      when: ensure_state == "present"
+
+    - name: Drop IPv6 iptables persistent rules
+      ansible.builtin.file:
+        path: "{{ iptables6_save_file }}"
+        state: absent
+      when: ensure_state == "absent"

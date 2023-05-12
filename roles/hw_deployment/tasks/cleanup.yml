@@ -1,0 +1,37 @@
+---
+
+- name: "Remove /etc/cloud folder"
+  ansible.builtin.file:
+    path: /etc/cloud
+    state: absent
+
+- name: "Remove /var/run/cloud-init folder"
+  ansible.builtin.file:
+    path: /var/run/cloud-init
+    state: absent
+
+- name: "Remove /etc/netplan/50-cloud-init.yaml file"
+  ansible.builtin.file:
+    path: /etc/netplan/50-cloud-init.yaml
+    state: absent
+
+- name: "Remove /etc/apt/apt.conf.d/90curtin-aptproxy file"
+  ansible.builtin.file:
+    path: /etc/apt/apt.conf.d/90curtin-aptproxy
+    state: absent
+
+- name: "Remove the cloud-init package"
+  ansible.builtin.apt:
+    name: cloud-init
+    state: absent
+    update_cache: true
+
+- name: "Remove /etc/sysctl.d/99-cloudimg-ipv6.conf"
+  ansible.builtin.file:
+    path: /etc/sysctl.d/99-cloudimg-ipv6.conf
+    state: absent
+
+- name: "Remove /etc/default/grub.d/50-cloudimg-settings.cfg"
+  ansible.builtin.file:
+    path: /etc/default/grub.d/50-cloudimg-settings.cfg
+    state: absent

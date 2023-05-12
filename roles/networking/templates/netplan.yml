@@ -1,0 +1,1 @@
+{{ netplan | to_yaml(indent=2,sort_keys=False) }}

@@ -1,0 +1,20 @@
+---
+
+- name: "Install ipmi apt and pip packages"
+  block:
+
+    - name: Install APT ipmi packages
+      become: true
+      ansible.builtin.apt:
+        name: "{{ apt_ipmi_packages }}"
+        state: "present"
+        update_cache: true
+      when: apt_ipmi_packages is defined
+
+    - name: Install PIP ipmi packages
+      ansible.builtin.pip:
+        name: "{{ pip_ipmi_packages }}"
+        executable: pip3
+      when: pip_ipmi_packages is defined
+
+  when: (machine_role is defined) and ("hw_machine" in machine_role)

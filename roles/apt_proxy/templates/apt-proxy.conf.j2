@@ -1,0 +1,9 @@
+// THIS FILE IS MANAGED BY ANSIBLE
+// Manual changes will be overwritten.
+
+{% if apt_proxy_http_chain %}
+Acquire::HTTP::Proxy "http://{{ apt_proxy_http_chain }}";
+{% endif %}
+{% if apt_proxy_https_chain %}
+Acquire::HTTPS::Proxy "https://{{ apt_proxy_https_chain }}";
+{% endif %}

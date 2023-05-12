@@ -1,0 +1,5 @@
+---
+
+ensure_state: present
+iptables4_save_file: "/etc/iptables/rules.v4"
+iptables6_save_file: "/etc/iptables/rules.v6"

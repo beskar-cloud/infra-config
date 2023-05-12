@@ -1,0 +1,9 @@
+---
+
+- name: Configure/setup iptables
+  hosts: hosts
+  connection: ssh
+  roles:
+    # Validate
+    - { role: cli_validation, tags: ['always'] }
+    - { role: iptables, tags: ['always'] }

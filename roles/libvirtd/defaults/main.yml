@@ -1,0 +1,13 @@
+---
+
+libvirtd_packages:
+  - qemu-kvm
+  - libvirt-daemon-system
+  - virtinst
+  - libvirt-clients
+  - bridge-utils
+  - libvirt-daemon
+
+libvirtd_images_folder: /opt/infra-config/vm-images
+
+libvirtd_default_image: "https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img"

@@ -1,0 +1,7 @@
+---
+
+- name: Remove APT Proxy
+  ansible.builtin.file:
+    path: '/etc/apt/apt.conf.d/{{ apt_proxy_file }}'
+    state: 'absent'
+  when: apt_proxy_state == 'absent'

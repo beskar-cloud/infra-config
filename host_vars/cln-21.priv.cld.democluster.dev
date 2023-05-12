@@ -1,0 +1,70 @@
+---
+
+ip_data: 10.48.133.21
+ip_mgmt: 10.48.130.21
+ip_ipmi: 10.48.191.21
+
+k8s_config:
+  hostnames: [cln-21.cluster.local, cln-21]
+
+netplan:
+  network:
+    version: 2
+    ethernets:
+      eno1:
+        addresses:
+          - 10.48.130.21/22
+        link-local: []
+        match:
+          macaddress: "94:40:c9:38:68:3c"
+        mtu: 1500
+        set-name: eno1
+        routes:
+          - to: default
+            via: 10.48.128.1
+      ens8f0:
+        match:
+          name: ens8f0
+        mtu: 9000
+        optional: true
+        set-name: ens8f0
+      ens8f1:
+        match:
+          name: ens8f1
+        mtu: 9000
+        optional: true
+        set-name: ens8f1
+    bridges:
+      br-storage:
+        interfaces: [ bond0.2503 ]
+        addresses: [ 10.48.133.21/22 ]
+        link-local: []
+        mtu: 9000
+        routes:
+          - to: 1.2.244.128/25
+            via: 10.48.132.1
+      br-data:
+        interfaces: [ bond0.2506 ]
+        addresses: [ 10.48.137.21/22 ]
+        link-local: []
+        mtu: 9000
+    bonds:
+      bond0:
+        dhcp4: false
+        dhcp6: false
+        interfaces: [ ens8f0, ens8f1 ]
+        mtu: 9000
+        parameters:
+          mode: 802.3ad
+          lacp-rate: slow
+          mii-monitor-interval: 100
+          transmit-hash-policy: layer2+3
+    vlans:
+      bond0.2503:
+        mtu: 9000
+        id: 2503
+        link: bond0
+      bond0.2506:
+        mtu: 9000
+        id: 2506
+        link: bond0

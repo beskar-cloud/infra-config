@@ -1,0 +1,5 @@
+---
+
+- include_tasks: "set_up_pci_passthrough.yml"
+- include_tasks: "reboot.yml"
+- include_tasks: "check_pci_passthrough.yml"

@@ -1,0 +1,19 @@
+---
+machine_role:
+  - "controlplane"
+  - "hw_machine"
+
+n2: "{{ ipp }}"
+
+iptables_deployment_prefixes:
+  organization_scope: "10.48.0.0/16"
+  management: "10.48.128.0/22"
+  data: "10.48.136.0/22"
+  storage: "10.48.132.0/22"
+  management_vm: "10.5.25.5/32"
+
+iptables_deployment_interfaces:
+  management: "eno1"
+  cluster: "br-data"
+  storage: "br-storage"
+  kubevip_services: "br-public"

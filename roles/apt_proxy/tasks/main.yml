@@ -1,0 +1,4 @@
+---
+
+- include_tasks: "remove-apt-proxy.yml"
+- include_tasks: "setup-apt-proxy.yml"

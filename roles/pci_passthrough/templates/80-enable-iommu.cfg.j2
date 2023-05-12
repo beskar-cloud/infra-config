@@ -1,0 +1,10 @@
+# THIS FILE IS MANAGED BY ANSIBLE
+# Manual changes will be overwritten.
+
+{% if processor_vendor.msg == "GenuineIntel" %}
+GRUB_CMDLINE_LINUX_DEFAULT="${GRUB_CMDLINE_LINUX_DEFAULT} intel_iommu=on"
+{% else %}
+{% if processor_vendor.msg == "AuthenticAMD" %}
+GRUB_CMDLINE_LINUX_DEFAULT="${GRUB_CMDLINE_LINUX_DEFAULT} amd_iommu=on"
+{% endif %}
+{% endif %}

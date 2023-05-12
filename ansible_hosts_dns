@@ -1,0 +1,5 @@
+[hosts:children]
+dns
+
+[dns]
+dns.ostack.cloud.domain.dev

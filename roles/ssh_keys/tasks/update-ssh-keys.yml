@@ -1,0 +1,12 @@
+---
+
+- name: Set up authorized ssh keys
+  ansible.builtin.template:
+      src: "authorized_keys.j2"
+      dest: "/home/ubuntu/.ssh/authorized_keys"
+      mode: '0600'
+      owner: ubuntu
+      group: ubuntu
+      force: true
+      validate: "/usr/bin/ssh-keygen -lf %s"
+  when: common_ssh_keys is defined

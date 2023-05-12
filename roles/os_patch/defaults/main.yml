@@ -1,0 +1,8 @@
+---
+
+patch_action: update
+patch_enabled: true
+patch_apply: true
+patch_service_restart: true
+patch_reboot: false
+package_name: '*'

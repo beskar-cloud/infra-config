@@ -1,0 +1,31 @@
+---
+
+- name: Restart services block
+  block:
+    - name: Get services to restart
+      ansible.builtin.shell: |
+        needrestart -l -b | grep "NEEDRESTART-SVC" | cut -d" " -f2
+      register: result
+      check_mode: false
+      changed_when: false
+
+    - name: Restart services
+      ansible.builtin.systemd:
+        state: restarted
+        name: "{{ item }}"
+      loop: "{{ result.stdout_lines }}"
+
+    - name: Restart systemd-logind.service if necessary
+      ansible.builtin.systemd:
+        state: restarted
+        name: "systemd-logind.service"
+      when: '"systemd-logind.service" in result.stdout_lines'
+
+    - name: List of restarted services
+      ansible.builtin.debug:
+        msg: "{{ result.stdout_lines }}"
+      when: result.stdout_lines is defined
+  delegate_to: "{{ inventory_hostname }}"
+  become: true
+  connection: ssh
+  when: patch_service_restart is true

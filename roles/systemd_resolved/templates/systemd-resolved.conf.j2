@@ -1,0 +1,26 @@
+# THIS FILE IS MANAGED BY ANSIBLE
+# Manual changes will be overwritten.
+
+
+[Resolve]
+{% if hostvars[inventory_hostname].dns.main is defined %}
+DNS={{ hostvars[inventory_hostname].dns.main }}
+{% else %}
+#DNS=
+{% endif %}
+{% if hostvars[inventory_hostname].dns.fallback is defined %}
+FallbackDNS={{ hostvars[inventory_hostname].dns.fallback }}
+{% else %}
+#FallbackDNS=
+{% endif %}
+#Domains=
+#DNSSEC=no
+#DNSOverTLS=no
+#MulticastDNS=no
+#LLMNR=no
+#Cache=no-negative
+#CacheFromLocalhost=no
+#DNSStubListener=yes
+#DNSStubListenerExtra=
+#ReadEtcHosts=yes
+#ResolveUnicastSingleLabel=no

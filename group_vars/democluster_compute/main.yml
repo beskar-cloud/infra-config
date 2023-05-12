@@ -1,0 +1,5 @@
+---
+machine_role:
+  - "hw_machine"
+
+cgroupsv2_disabled: true

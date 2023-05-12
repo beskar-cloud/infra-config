@@ -1,0 +1,21 @@
+---
+
+# This playbook replaces Puppet. It is run every day by the service machine.
+# You can also run it manually from your computer simply by running the following
+# command in the toolbox:
+# ansible-playbook play_automated_common.yml -i ./ansible_hosts -l controlplane
+
+- name: Common server maintenance.
+  hosts: hosts
+  roles:
+    # Validate
+    - { role: cli_validation, tags: ['always'] }
+    - { role: hostname, tags: ['always']}
+    - { role: shell, tags: ['always']}
+    - { role: ssh_keys, tags: ['always']}
+    - { role: ipv6, tags: ['always'] }
+    - { role: networking, tags: ['always']}
+#    - { role: iptables, tags: ['always'] }
+    - { role: unattended_upgrades, tags: ['always']}
+    - { role: systemd_timesyncd, tags: ['always']}
+    - { role: hosts_file, tags: ['always']}

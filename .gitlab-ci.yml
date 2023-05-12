@@ -1,0 +1,46 @@
+default:
+  image:
+    name: registry.gitlab.ics.muni.cz:443/cloud/g2/infra-config/ci:latest
+
+
+stages:
+  - build_ci_container
+  - ci-checks
+
+
+
+ansible-linter:
+  stage: ci-checks
+  script:
+    - chmod 700 .
+    - touch .vault_pass
+    - echo "sdfgOIPOfuio32ifuaiof" > .vault_pass
+    - ansible-playbook --version
+    - ansible-lint --version
+    - ansible-lint play_*.yml
+    - ansible-lint roles/*
+    - ansible-inventory --graph
+
+networing-mac-duplicates:
+  stage: ci-checks
+  script: python3 ci/mac-address-duplicates.py host_vars
+
+networing-ip-duplicates:
+  stage: ci-checks
+  script: python3 ci/ip_address_duplicates.py --ignore-file ci/ip_ignore.yaml  host_vars/*
+
+
+build_docker:
+  image: docker:latest
+  stage: build_ci_container
+  services:
+    - docker:latest
+  script:
+    - cd ci/container
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - ID=$(docker build -q -t "$CI_REGISTRY_IMAGE"/ci .)
+    - TAG=$(docker inspect --format '{{ index .Config.Labels "version"}}' $ID)
+    - docker tag $ID "$CI_REGISTRY_IMAGE"/ci\:$TAG
+    - docker images
+    - docker push -a "$CI_REGISTRY_IMAGE"/ci
+  when: manual

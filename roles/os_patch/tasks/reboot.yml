@@ -1,0 +1,24 @@
+---
+
+- name: Check reboot requirement
+  become: true
+  ansible.builtin.shell: |
+    needrestart -k -b | grep "NEEDRESTART-KSTA" | cut -d" " -f2
+  register: reboot
+  changed_when: false
+  failed_when: false
+
+- name: Reboot notification and reboot block
+  block:
+
+    - name: Notify if reboot is required
+      ansible.builtin.debug: msg="Reboot required after OS patches!"
+
+    - name: Rebooting (applied only if reboot is required and enabled)
+      ansible.builtin.reboot:
+      when: (patch_reboot is true) or (force_reboot is defined and force_reboot is true)
+  delegate_to: "{{ inventory_hostname }}"
+  become: true
+  connection: ssh
+  when:
+    - (reboot.rc is defined and reboot.stdout | int > 1) or (force_reboot is defined and force_reboot is true)

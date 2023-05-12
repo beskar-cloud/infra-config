@@ -1,0 +1,9 @@
+---
+
+- name: Manage DNS
+  hosts: hosts
+  connection: local
+  gather_facts: false
+  roles:
+    - { role: cli_validation, tags: ['always'] }
+    - { role: dns, tags: ['never', 'dns-create'], dns_state: present }

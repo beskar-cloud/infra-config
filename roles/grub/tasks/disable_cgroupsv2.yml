@@ -1,0 +1,12 @@
+---
+
+- name: Add disable_cgroupvs2.cfg
+  become: true
+  ansible.builtin.template:
+    src: templates/disable_cgroupsv2.cfg
+    dest: /etc/default/grub.d/disable_cgroupsv2.cfg
+    owner: root
+    group: root
+    mode: 0644
+    backup: false
+  notify: update-grub

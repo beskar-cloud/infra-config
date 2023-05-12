@@ -1,0 +1,14 @@
+---
+
+- name: Change PS1 in /root/.bashrc and /home/ubuntu/.bashrc
+  become: true
+  ansible.builtin.lineinfile:
+    path: "{{ item.path }}"
+    regexp: "^.*PS1=.+ #managed by infra-config"
+    line: "PROMPT_COMMAND='_bash_prompt_exit_code=$?'; PS1='{{ item.bash_ps1 }}' #managed by infra-config"
+    state: present
+    create: true
+    mode: 0644
+  loop:
+    - { path: '/root/.bashrc', bash_ps1: "{{ bash_root_ps1 }}" }
+    - { path: '/home/ubuntu/.bashrc', bash_ps1: "{{ bash_nonroot_ps1 }}" }

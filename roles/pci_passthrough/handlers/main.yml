@@ -1,0 +1,7 @@
+---
+
+- name: Update grub after changing /etc/default/grub
+  become: true
+  ansible.builtin.command:
+    cmd: update-grub2
+  listen: update-grub-cfg

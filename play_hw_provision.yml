@@ -1,0 +1,28 @@
+---
+
+- name: Provision a hypervisor - cleanup after MAAS, OS tuning and tweaks.
+  hosts: hosts
+  pre_tasks:
+    - name: Confirm HW provisioning
+      tags: confirm
+      ansible.builtin.pause:
+        prompt: |
+          You are about to provision a hypervisor. This should be done only on a newly installed serverer
+          (with fresh operating system only), otherwise data could be damaged. Do you really want to continue?
+
+          Press Enter to continue.
+
+  roles:
+    # Validate
+    - { role: cli_validation, tags: ['always'] }
+    - { role: systemd_resolved, tags: ['always'] }
+    - { role: hw_deployment, tags: ['always'], become: true }
+    - { role: hostname, tags: ['always'] }
+    - { role: shell, tags: ['always'] }
+    - { role: ssh_keys, tags: ['always'] }
+    - { role: networking, tags: ['always'] }
+    - { role: install_packages, tags: ['always'] }
+    - { role: unattended_upgrades, tags: ['always'] }
+    - { role: hostname, tags: ['always'] }
+    - { role: systemd_timesyncd, tags: ['always']}
+    - { role: hosts_file, tags: ['always']}

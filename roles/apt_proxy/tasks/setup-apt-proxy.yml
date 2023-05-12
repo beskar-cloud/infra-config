@@ -1,0 +1,10 @@
+---
+
+- name: Setup APT Proxy
+  ansible.builtin.template:
+    src: 'apt-proxy.conf.j2'
+    dest: '/etc/apt/apt.conf.d/{{ apt_proxy_file }}'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  when: apt_proxy_state == 'present'

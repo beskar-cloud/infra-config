@@ -1,0 +1,4 @@
+---
+
+dns_reverse_records:
+  - { record: 1.72.16.10.in-addr.arpa.,   zone: 72.16.10.in-addr.arpa.,   value: test.ostack.cloud.democluster.dev. }

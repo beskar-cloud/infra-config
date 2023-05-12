@@ -1,0 +1,9 @@
+---
+
+- name: Manage GRUB
+  hosts: hosts
+  connection: ssh
+  roles:
+    # Validate
+    - { role: cli_validation, tags: ['always'] }
+    - { role: grub}

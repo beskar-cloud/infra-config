@@ -1,0 +1,9 @@
+---
+
+- name: Update hostname
+  hosts: hosts
+  connection: ssh
+  roles:
+    # Validate
+    - { role: cli_validation, tags: ['always'] }
+    - { role: hostname, tags: ['always'] }

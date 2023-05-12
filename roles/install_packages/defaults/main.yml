@@ -1,0 +1,8 @@
+---
+
+apt_ipmi_packages:
+  - python3-pip
+  - ipmitool
+
+pip_ipmi_packages:
+  - pyghmi
