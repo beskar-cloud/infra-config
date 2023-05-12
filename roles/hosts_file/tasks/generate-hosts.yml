@@ -1,0 +1,13 @@
+---
+
+- name: Generate /etc/hosts file
+  become: true
+  vars:
+    host_list: "{{ groups['hosts'] }}"
+  ansible.builtin.template:
+    src: templates/hosts.j2
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: 0644
+    backup: true

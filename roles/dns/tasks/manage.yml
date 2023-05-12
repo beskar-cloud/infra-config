@@ -1,0 +1,47 @@
+---
+
+- name: Ensure dns records
+  block:
+    - name: Fetch nsupdate key
+      ansible.builtin.slurp:
+        src: /etc/nsupdate/key
+      register: remote_nsupdate_secrets
+      run_once: true
+      when: dns_operator != "localhost"
+
+    - name: Set nsupdate_secrets fact
+      ansible.builtin.set_fact:
+        nsupdate_secrets: "{{ remote_nsupdate_secrets['content'] | b64decode | from_yaml }}"
+      run_once: true
+      when: dns_operator != "localhost"
+
+    - name: "Ensure A dns records are {{ dns_state }}"
+      community.general.nsupdate:
+        key_name: "{{ nsupdate_secrets.key }}"
+        key_secret: "{{ nsupdate_secrets.secret }}"
+        key_algorithm: "{{ nsupdate_secrets.algorithm }}"
+        server: "{{ dns_server }}"
+        zone: "{{ dns_zone }}"
+        record: "{{ item.record }}"
+        value: "{{ item.value }}"
+        type: "{{ item.type | default(dns_default_type) }}"
+        ttl: "{{ dns_ttl }}"
+        state: "{{ dns_state }}"
+      loop: "{{ dns_forward_records }}"
+
+    - name: "Ensure PTR dns records are {{ dns_state }}"
+      community.general.nsupdate:
+        key_name: "{{ nsupdate_secrets.key }}"
+        key_secret: "{{ nsupdate_secrets.secret }}"
+        key_algorithm: "{{ nsupdate_secrets.algorithm }}"
+        server: "{{ dns_server }}"
+        zone: "{{ item.zone }}"
+        record: "{{ item.record }}"
+        value: "{{ item.value }}"
+        type: PTR
+        ttl: "{{ dns_ttl }}"
+        state: "{{ dns_state }}"
+      loop: "{{ dns_reverse_records }}"
+
+  delegate_to: "{{ dns_operator }}"
+  connection: ssh

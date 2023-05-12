@@ -1,0 +1,9 @@
+---
+
+- name: APT Proxy configuration
+  hosts: hosts
+  connection: ssh
+  roles:
+    # Validate
+    - { role: cli_validation, tags: ['always'] }
+    - { role: apt_proxy, tags: ['always'] }

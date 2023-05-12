@@ -1,0 +1,16 @@
+# THIS FILE IS MANAGED BY ANSIBLE
+# Manual changes will be overwritten.
+
+{% for item in common_ssh_keys %}
+{{ item }}
+{% endfor %}
+{% if group_ssh_keys is defined %}
+{% for item in group_ssh_keys %}
+{{ item }}
+{% endfor %}
+{% endif %}
+{% if host_ssh_keys is defined %}
+{% for item in host_ssh_keys %}
+{{ item }}
+{% endfor %}
+{% endif %}

@@ -1,0 +1,174 @@
+---
+
+- name: Get existing iptables rules
+  ansible.builtin.command: iptables -n -L
+  changed_when: false
+  register: iptables_rules
+  become: true
+
+- name: Create custom iptables chain
+  ansible.builtin.command: iptables -N "infra-config-input-firewall"
+  when: "'Chain infra-config-input-firewall' not in iptables_rules.stdout"
+  become: true
+
+- name: Jump to "infra-config-input-firewall"
+  ansible.builtin.iptables:
+    chain: INPUT
+    jump: "infra-config-input-firewall"
+    action: append
+    state: "{{ ensure_state }}"
+  become: true
+
+- name: Global interface configuration
+  block:
+      # todo: allow multiple mgmt vms
+    - name: Allow all traffic from management VM
+      ansible.builtin.iptables:
+        chain: "infra-config-input-firewall"
+        action: append
+        source: "{{ iptables_deployment_prefixes.management_vm }}"
+        comment: "Allow all traffic from management VM"
+        jump: ACCEPT
+        state: "{{ ensure_state }}"
+      when: iptables_deployment_prefixes.management_vm is defined
+
+    - name: Allow ICMP traffic
+      ansible.builtin.iptables:
+        chain: "infra-config-input-firewall"
+        action: append
+        source: "{{ iptables_deployment_prefixes.management_vm }}"
+        comment: "Allow ICMP traffic"
+        protocol: icmp
+        jump: ACCEPT
+        state: "{{ ensure_state }}"
+      when: iptables_deployment_prefixes.management_vm is defined
+
+    - name: Allow ICMP traffic
+      ansible.builtin.iptables:
+        chain: "infra-config-input-firewall"
+        action: append
+        source: "{{ item }}"
+        comment: "Allow ICMP traffic"
+        protocol: icmp
+        jump: ACCEPT
+        state: "{{ ensure_state }}"
+      when: iptables_deployment_prefixes is defined
+      loop:
+        #- "{{ iptables_common_prefixes.public_muni }}"
+        - "{{ iptables_deployment_prefixes.organization_scope }}"
+
+    - name: Allow related or established traffic on all interfaces
+      ansible.builtin.iptables:
+        chain: "infra-config-input-firewall"
+        action: append
+        comment: "Allow RELATED,ESTABLISHED traffic"
+        ctstate: "RELATED,ESTABLISHED"
+        jump: ACCEPT
+        state: "{{ ensure_state }}"
+  become: true
+
+- name: Setup management interface
+  block:
+      # required, will fail if variables are not defined
+    - name: Allow port on management network
+      ansible.builtin.iptables:
+        chain: "infra-config-input-firewall"
+        action: append
+        source: "{{ iptables_deployment_prefixes.management }}"
+        in_interface: "{{ iptables_deployment_interfaces.management }}"
+        comment: "Allow port on management network"
+        protocol: tcp
+        destination_port: "{{ item }}"
+        jump: ACCEPT
+        state: "{{ ensure_state }}"
+      loop:
+        - "22"
+        - "6443"
+
+    - name: Drop remaining traffic on management interface
+      ansible.builtin.iptables:
+        chain: "infra-config-input-firewall"
+        action: append
+        in_interface: "{{ iptables_deployment_interfaces.management }}"
+        comment: "Drop remaining traffic on management interface"
+        jump: DROP
+        state: "{{ ensure_state }}"
+  when: iptables_deployment_interfaces.management is defined
+  become: true
+
+- name: Setup cluster interface
+  block:
+    - name: Allow all on cluster interface
+      ansible.builtin.iptables:
+        chain: "infra-config-input-firewall"
+        action: append
+        in_interface: "{{ iptables_deployment_interfaces.cluster }}"
+        comment: "Allow all traffic on cluster interface"
+        jump: ACCEPT
+        state: "{{ ensure_state }}"
+  when: iptables_deployment_interfaces.cluster is defined
+  become: true
+
+- name: Setup storage interface
+  block:
+    - name: Drop remaining traffic on storage interface
+      ansible.builtin.iptables:
+        chain: "infra-config-input-firewall"
+        action: append
+        in_interface: "{{ iptables_deployment_interfaces.storage }}"
+        comment: "Drop remaining traffic on storage interface"
+        jump: DROP
+        state: "{{ ensure_state }}"
+  when: iptables_deployment_interfaces.storage is defined
+  become: true
+
+- name: Setup internal ceph interface
+  block:
+    - name: Enable all traffic on internal ceph network
+      ansible.builtin.iptables:
+        chain: "infra-config-input-firewall"
+        action: append
+        source: "{{ iptables_deployment_prefixes.local_ceph }}"
+        in_interface: "{{ iptables_deployment_interfaces.local_ceph }}"
+        comment: "Enable all traffic on internal ceph cluster network"
+        jump: ACCEPT
+        state: "{{ ensure_state }}"
+
+    - name: Drop remaining traffic on internal ceph cluster network
+      ansible.builtin.iptables:
+        chain: "infra-config-input-firewall"
+        action: append
+        in_interface: "{{ iptables_deployment_interfaces.local_ceph }}"
+        comment: "Drop remaining traffic on internal ceph cluster interface"
+        jump: DROP
+        state: "{{ ensure_state }}"
+  when: iptables_deployment_interfaces.local_ceph is defined
+  become: true
+
+- name: Setup kubevip_services interface
+  block:
+    - name: Allow HTTP/HTTPS on VIP interface
+      ansible.builtin.iptables:
+        chain: "infra-config-input-firewall"
+        action: append
+        source: "{{ iptables_common_prefixes.internet }}"
+        in_interface: "{{ iptables_deployment_interfaces.kubevip_services }}"
+        comment: "Allow HTTP/HTTPS"
+        protocol: tcp
+        destination_port: "{{ item }}"
+        jump: ACCEPT
+        state: "{{ ensure_state }}"
+      loop:
+        - "80"
+        - "443"
+
+    - name: Drop remaining traffic on kubevip_services interface
+      ansible.builtin.iptables:
+        chain: "infra-config-input-firewall"
+        action: append
+        in_interface: "{{ iptables_deployment_interfaces.kubevip_services }}"
+        comment: "Drop remaining traffic on kubevip_services interface"
+        jump: DROP
+        state: "{{ ensure_state }}"
+  when: iptables_deployment_interfaces.kubevip_services is defined
+  become: true

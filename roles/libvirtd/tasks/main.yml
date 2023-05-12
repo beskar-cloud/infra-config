@@ -1,0 +1,5 @@
+---
+
+- include_tasks: "install-libvirtd.yml"
+- include_tasks: "download-images.yml"
+  tags: libvirt_image_download

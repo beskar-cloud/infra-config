@@ -1,0 +1,9 @@
+---
+
+- name: Configure/setup networking
+  hosts: hosts
+  connection: ssh
+  roles:
+    # Validate
+    - { role: cli_validation, tags: ['always'] }
+    - { role: networking, tags: ['always']}

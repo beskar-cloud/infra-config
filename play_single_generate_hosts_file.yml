@@ -1,0 +1,8 @@
+---
+
+- name: Manage hosts file
+  hosts: hosts
+  roles:
+    # Validate
+    - { role: cli_validation, tags: ['always'] }
+    - { role: hosts_file, tags: ['always'] }

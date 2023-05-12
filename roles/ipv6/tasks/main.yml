@@ -1,0 +1,4 @@
+---
+
+- name: Configure IPv6 on server
+  include_tasks: disable.yml

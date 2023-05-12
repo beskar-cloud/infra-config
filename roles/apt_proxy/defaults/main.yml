@@ -1,0 +1,6 @@
+---
+
+apt_proxy_file: "00proxy"
+apt_proxy_http_chain: ""
+apt_proxy_https_chain: ""
+apt_proxy_state: '{{ "present" if (apt_proxy_http_chain or apt_proxy_https_chain) else "absent" }}'

@@ -1,0 +1,13 @@
+---
+
+group_ssh_keys: []
+
+patch_enabled: false
+
+# shell configuration
+bash_root_ps1: '[\[\e[0;31m\]\u\[\e[0m\]@\h:\[\e[0;31m\]democluster\[\e[0m\]~\[$( [ "$?" == "0" ] && echo -n "\e[0;32m\]$_bash_prompt_exit_code\[\e[0m" || echo -n "\e[0;31m\]$_bash_prompt_exit_code\[\e[0m")\]]\$ '
+bash_nonroot_ps1: '[\[\e[0;33m\]\u\[\e[0m\]@\h:\[\e[0;31m\]democluster\[\e[0m\]~\[$( [ "$?" == "0" ] && echo -n "\e[0;32m\]$_bash_prompt_exit_code\[\e[0m" || echo -n "\e[0;31m\]$_bash_prompt_exit_code\[\e[0m")\]]\$ '
+
+dns:
+  main: 8.8.8.8
+  fallback: 1.1.1.1

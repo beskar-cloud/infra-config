@@ -1,0 +1,5 @@
+// THIS FILE IS MANAGED BY ANSIBLE
+// Manual changes will be overwritten. 
+
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "1";

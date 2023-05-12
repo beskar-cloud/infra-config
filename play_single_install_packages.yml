@@ -1,0 +1,9 @@
+---
+
+- name: Install packages
+  hosts: hosts
+  connection: ssh
+  roles:
+    # Validate
+    - { role: cli_validation, tags: ['always'] }
+    - { role: install_packages, tags: ['always'] }

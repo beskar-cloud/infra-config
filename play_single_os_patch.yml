@@ -1,0 +1,13 @@
+---
+
+- name: Patch OS
+  # hosts: all,!hosts_remote_dns,!production_ceph
+  hosts: hosts
+  roles:
+    # Validate
+    - { role: cli_validation, tags: ['always'] }
+    - { role: os_patch, tags: ['never', 'update', 'update-only'], patch_action: update }
+    - { role: os_patch, tags: ['never', 'update', 'restart-services'], patch_action: restart-services }
+    - { role: os_patch, tags: ['never', 'update', 'check-reboot'], patch_action: reboot }
+    # Reboot server if reboot is required
+    - { role: os_patch, tags: ['never', 'reboot'], patch_action: reboot, patch_reboot: true }

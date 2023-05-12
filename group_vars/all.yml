@@ -1,0 +1,25 @@
+---
+
+common_ssh_keys:
+  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDSS8J5AStswCnf2JQboCyue8JzX5T/Tsg68LasOT3XZkAMelVrjYBIZ/0P858WMTMW5Qc+ebSmbm0eOopuaN9FrZW2ZsaDyzPamAuxseoTkRV+7Oz5NOF0WCYspgLsbMcaQ+F+qrKzMJRLwduhL67inIJVYkgeXY6S1N2wZAEgYUE3jbZrhaGNA1kQf2dJoMtnikrtOB+vyZkLgFRfgjmq+ny5rCM277otFxwCHhm2+jrWtM8lPY6kJ6WcZfg2njdYW3Oda479jMUg28t4pjqmBygKl3MQ9MOVlJkde4Ez5LhTynXMkSPhH5PnzQrfkQMU2YozCNQ2KBiGDdB3Cd2Lqsou32zUk1/sKc+aN1+8jtm+iogpgYxAPwyCh8S/brVbDu9BerowNRMa4Nual/7YKdtwPEClFp34dgV7tvXVcnVF/TtAkJAUtd02Fh9iS2iM9IrC0gkDEBUr0HGY5U83zODf356aVGTE6hs65wsURGAT6z/DvWYZtMLWJB8Y3p7qHGV1N1OHSLDHgjzuhAHI54h8zhjQaiPsH3Yx4324D1ndtJX8DeWkKdzCNARnw8sfIUhCkwbgv0v6ZkDy8yP6jsHjBc89NjB9kNw1dZcnaDLNqGctcCy50BOeciBYC598i0hec2MieoN0Z2E7lbWZps/+0korxtIxp7TzcKfiKw== secureduser@securedhost
+
+common_packages:
+  - nano
+  - needrestart
+  - unattended-upgrades
+  - vim
+  - mc
+  - mtr
+  - htop
+  - traceroute
+  - iotop
+  - iftop
+
+# mail configuration
+admin_mail: "cloud@team.dev"
+
+iptables_common_prefixes:
+  internet: 0.0.0.0/0
+  localhost: 127.0.0.0/8
+  linklocal: 169.254.0.0/16
+  kubernetes: 10.233.0.0/16

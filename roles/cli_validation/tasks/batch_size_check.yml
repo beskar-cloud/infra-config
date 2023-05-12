@@ -1,0 +1,22 @@
+---
+
+- name: Batch size check
+  ansible.builtin.pause:
+    prompt: |
+
+              !!! WARNING !!! Number of hosts targeted in current play is greater than {{ host_limit_warning }}.
+
+              List of hosts targeted in current play:
+
+              {{ ansible_play_batch | join(', ') }}
+
+              Do you want to continue [y/n] ?
+
+  register: continue_prompt
+  when: (ansible_play_batch | default([])) | length > host_limit_warning
+
+- name: Meta - ending play
+  ansible.builtin.meta: end_play
+  when:
+    - (ansible_play_batch | default([])) | length > host_limit_warning
+    - continue_prompt.user_input != 'y'

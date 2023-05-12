@@ -1,0 +1,7 @@
+---
+
+- name: Configure iptables on host
+  include_tasks: configure.yml
+
+- name: Configure iptables-persistent on host
+  include_tasks: persist.yml

@@ -1,0 +1,26 @@
+---
+
+- name: "Create {{ file_name }} file"
+  become: true
+  ansible.builtin.copy:
+    src: "20auto-upgrades"
+    dest: "{{ file_name }}"
+    mode: '0644'
+    owner: root
+    group: root
+    force: true
+  vars:
+    file_name: '/etc/apt/apt.conf.d/20auto-upgrades'
+
+- name: "Create {{ file_name }} file"
+  become: true
+  ansible.builtin.template:
+    src: "50unattended-upgrades.j2"
+    dest: "{{ file_name }}"
+    mode: '0644'
+    owner: root
+    group: root
+    force: true
+  vars:
+    file_name: '/etc/apt/apt.conf.d/50unattended-upgrades'
+  notify: unattended-upgrades.restart

@@ -1,0 +1,9 @@
+---
+
+- name: Set up pci passthrough
+  hosts: hosts
+  connection: ssh
+  roles:
+    # Validate
+    - { role: cli_validation, tags: ['always'] }
+    - { role: pci_passthrough, tags: ['always'], pci_pass_force_reboot: true }

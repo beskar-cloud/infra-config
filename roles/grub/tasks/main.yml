@@ -1,0 +1,15 @@
+---
+
+- name: Disable cgroups v2
+  ansible.builtin.include_tasks: "disable_cgroupsv2.yml"
+  when: cgroupsv2_disabled is defined and cgroupsv2_disabled is true
+  tags: ['always']
+
+- name: "Flush handlers"
+  ansible.builtin.meta: flush_handlers
+  tags: ['always']
+
+- name: Reboot
+  become: true
+  tags: ['never', 'reboot']
+  ansible.builtin.reboot:

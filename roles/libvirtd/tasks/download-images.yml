@@ -1,0 +1,13 @@
+---
+
+- name: "Download images"
+  tags: ['never', 'libvirt_image_download']
+  block:
+    - name: Download images
+      become: true
+      ansible.builtin.get_url:
+        url: "{{ libvirtd_default_image }}"
+        dest: "{{ libvirtd_images_folder }}"
+        mode: '0744'
+
+  when: (machine_role is defined) and ("libvirtd" in machine_role)

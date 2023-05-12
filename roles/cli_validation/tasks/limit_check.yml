@@ -1,0 +1,9 @@
+---
+- name: Block - CLI limit checking
+  block:
+    - name: Check limit parameter
+      ansible.builtin.debug:
+        msg: "You have to specify target hosts with --limit or -l parameter"
+    - name: Ending play
+      ansible.builtin.meta: end_play
+  when: ansible_limit is not defined

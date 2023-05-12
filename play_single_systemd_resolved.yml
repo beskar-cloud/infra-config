@@ -1,0 +1,9 @@
+---
+
+- name: Manage systemd_resolved
+  hosts: hosts
+  connection: ssh
+  roles:
+    # Validate
+    - { role: cli_validation, tags: ['always'] }
+    - { role: systemd_resolved, tags: ['always'] }

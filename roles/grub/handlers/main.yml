@@ -1,0 +1,7 @@
+---
+
+- name: Update-grub2
+  become: true
+  ansible.builtin.command:
+    cmd: /usr/sbin/update-grub2
+  listen: update-grub

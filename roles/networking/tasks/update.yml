@@ -1,0 +1,16 @@
+---
+
+- name: Print
+  ansible.builtin.debug:
+    msg: "{{ netplan }}"
+
+- name: Update netplan configuration
+  become: true
+  ansible.builtin.template:
+    src: templates/netplan.yml
+    dest: /etc/netplan/00-conf.yaml
+    owner: root
+    group: root
+    mode: 0644
+    backup: false
+  notify: netplan.apply

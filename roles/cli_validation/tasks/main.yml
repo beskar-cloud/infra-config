@@ -1,0 +1,9 @@
+---
+
+- name: CLI Validation block
+  block:
+    - include_tasks: limit_check.yml
+    - include_tasks: batch_size_check.yml
+  when: not cli_validation_skip
+  delegate_to: localhost
+  run_once: true

@@ -1,0 +1,13 @@
+---
+
+- name: Update and upgrade block
+  block:
+    - name: Update and upgrade apt packages
+      become: true
+      ansible.builtin.apt:
+        upgrade: true
+        update_cache: true
+
+  delegate_to: "{{ inventory_hostname }}"
+  connection: ssh
+  when: patch_apply is true

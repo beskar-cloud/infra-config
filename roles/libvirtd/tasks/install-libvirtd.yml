@@ -1,0 +1,77 @@
+---
+
+- name: "Install libvirtd"
+  block:
+
+    - name: Install libvirtd packages
+      become: true
+      ansible.builtin.apt:
+        name: "{{ libvirtd_packages }}"
+        state: "present"
+        update_cache: true
+      when: libvirtd_packages is defined
+
+    - name: "Ensure libvirtd service is enabled and running"
+      become: true
+      ansible.builtin.systemd:
+        name: libvirtd.service
+        enabled: true
+        state: "started"
+
+    - name: "Check if group 'libvirt' exists"
+      ansible.builtin.group:
+        name: libvirt
+        state: present
+
+    - name: "Check if group 'libvirt-qemu' exists"
+      ansible.builtin.group:
+        name: libvirt-qemu
+        state: present
+
+    - name: "Check if user 'libvirt-qemu' exists"
+      ansible.builtin.user:
+        name: libvirt-qemu
+        state: present
+
+    - name: "Check if virtualization is OK on host"
+      become: true
+      ansible.builtin.command:
+        cmd: kvm-ok
+      register: host_check_kvm
+      changed_when: false
+      failed_when: host_check_kvm.rc != 0
+
+    - name: "Append the user 'libvirt-qemu' to the group 'libvirt-qemu'"
+      become: true
+      ansible.builtin.user:
+        name: libvirt-qemu
+        groups: libvirt-qemu
+        append: true
+
+    - name: "Append the user 'ubuntu' to the group 'libvirt'"
+      become: true
+      ansible.builtin.user:
+        name: ubuntu
+        groups: libvirt
+        append: true
+
+    - name: "Prepare folder for disk images"
+      become: true
+      ansible.builtin.file:
+        path: "{{ libvirtd_images_folder }}"
+        owner: root
+        group: root
+        mode: '0711'
+        state: directory
+
+    - name: "Copy README file to the previous folder"
+      become: true
+      ansible.builtin.template:
+        src: templates/vm-readme.txt
+        dest: "{{ libvirtd_images_folder }}/README.txt"
+        owner: root
+        group: root
+        mode: '0744'
+
+
+  when: (machine_role is defined) and ("libvirtd" in machine_role)

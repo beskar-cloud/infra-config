@@ -1,0 +1,9 @@
+---
+
+- name: Install unattended upgrades
+  hosts: hosts
+  connection: ssh
+  roles:
+    # Validate
+    - { role: cli_validation, tags: ['always'] }
+    - { role: unattended_upgrades, tags: ['always'] }

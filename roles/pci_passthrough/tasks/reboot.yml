@@ -1,0 +1,6 @@
+---
+
+- name: Rebooting system
+  become: true
+  ansible.builtin.reboot:
+  when: pci_pass_force_reboot is true

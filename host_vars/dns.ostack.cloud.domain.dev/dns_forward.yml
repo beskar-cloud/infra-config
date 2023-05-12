@@ -1,0 +1,23 @@
+---
+
+dns_forward_records:
+  # democluster
+  - { record: brno.openstack.cloud.democluster.dev.,                       value: &kubevip-lb-ip 1.2.91.97 }
+  - { record: horizon.brno.openstack.cloud.democluster.dev.,               value: *kubevip-lb-ip }
+  - { record: lb.brno.openstack.cloud.democluster.dev.,                    value: *kubevip-lb-ip }
+  - { record: object-store.brno.openstack.cloud.democluster.dev.,          value: *kubevip-lb-ip }
+  - { record: compute.brno.openstack.cloud.democluster.dev.,               value: *kubevip-lb-ip }
+  - { record: placement.brno.openstack.cloud.democluster.dev.,             value: *kubevip-lb-ip }
+  - { record: orchestration.brno.openstack.cloud.democluster.dev.,         value: *kubevip-lb-ip }
+  - { record: volume.brno.openstack.cloud.democluster.dev.,                value: *kubevip-lb-ip } # deprecation in favor of volumev3
+  - { record: volumev3.brno.openstack.cloud.democluster.dev.,              value: *kubevip-lb-ip }
+  - { record: cloudformation.brno.openstack.cloud.democluster.dev.,        value: *kubevip-lb-ip }
+  - { record: secret.brno.openstack.cloud.democluster.dev.,                value: *kubevip-lb-ip } # deprecation in favor of key-manager
+  - { record: key-manager.brno.openstack.cloud.democluster.dev.,           value: *kubevip-lb-ip }
+  - { record: image.brno.openstack.cloud.democluster.dev.,                 value: *kubevip-lb-ip }
+  - { record: identity.brno.openstack.cloud.democluster.dev.,              value: *kubevip-lb-ip }
+  - { record: network.brno.openstack.cloud.democluster.dev.,               value: *kubevip-lb-ip }
+  - { record: prometheus.brno.openstack.cloud.democluster.dev.,            value: *kubevip-lb-ip }
+  - { record: grafana.brno.openstack.cloud.democluster.dev.,               value: *kubevip-lb-ip }
+  - { record: alertmanager.brno.openstack.cloud.democluster.dev.,          value: *kubevip-lb-ip }
+  - { record: pushgateway.brno.openstack.cloud.democluster.dev.,           value: *kubevip-lb-ip }

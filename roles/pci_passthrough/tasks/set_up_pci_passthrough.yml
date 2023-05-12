@@ -1,0 +1,46 @@
+---
+
+- name: Set up pci passthrough block
+  block:
+
+    - name: Get processor vendor
+      ansible.builtin.debug:
+        msg: "{{ ansible_facts['processor'][1] }}"
+      register: processor_vendor
+
+    - name: Check for IOMMU Support on Intel
+      ansible.builtin.command:
+        cmd: grep "vmx" /proc/cpuinfo
+      when: processor_vendor.msg == 'GenuineIntel'
+      register: processor_intel_support
+      changed_when: false
+
+    - name: Check for IOMMU Support on AMD
+      ansible.builtin.command:
+        cmd: grep "svm" /proc/cpuinfo
+      when: processor_vendor.msg == 'AuthenticAMD'
+      register: processor_amd_support
+      changed_when: false
+
+    - name: Final check for IOMMU Support on your CPU
+      ansible.builtin.debug:
+        msg: "Check IOMMU support"
+      failed_when: (processor_intel_support.rc > 0) and (processor_amd_support.rc > 0)
+
+    - name: Enable iommu in grub
+      become: true
+      ansible.builtin.template:
+        src: "80-enable-iommu.cfg.j2"
+        dest: "{{ file_name }}"
+        mode: '0644'
+        owner: root
+        group: root
+        force: true
+      vars:
+        file_name: '/etc/default/grub.d/80-enable-iommu.cfg'
+      notify: update-grub-cfg
+
+  when: (machine_role is defined) and ("pci_passthrough" in machine_role)
+
+- name: Flush pci passthrough handlers
+  ansible.builtin.meta: flush_handlers

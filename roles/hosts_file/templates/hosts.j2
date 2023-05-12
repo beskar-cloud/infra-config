@@ -1,0 +1,30 @@
+# THIS FILE IS MANAGED BY ANSIBLE
+# Manual changes will be overwritten.
+
+
+
+# IPv6
+::1 ip6-localhost ip6-loopback localhost6 localhost6.localdomain
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+
+
+
+# IPv4
+127.0.0.1 localhost localhost.localdomain
+
+
+{% if custom_hosts_entries is defined %}
+# custom entries
+{% for entry in custom_hosts_entries %}
+{{ entry.ip_address }} {{ entry.hosts|join(' ') }}
+{% endfor %}
+{% endif %}
+
+# infrastructure defined as hosts in infra-config
+{% for host in host_list %}
+{% if hostvars[host].ip_data is defined %}
+{{ hostvars[host].ip_data }} {{ host }} {% if hostvars[host].k8s_config.hostnames is defined %}{{ hostvars[host].k8s_config.hostnames|join(' ')}}{% endif %}
+
+{% endif %}
+{% endfor %}
