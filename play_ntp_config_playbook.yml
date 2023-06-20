@@ -1,0 +1,14 @@
+---
+- name: Configure NTP on hosts
+  hosts: hosts
+  become: true
+  roles:
+    - ntp_config
+  handlers:
+    - name: restart NTP service
+      service:
+        name: ntp
+        state: restarted
+        enabled: true
+      become: true
+

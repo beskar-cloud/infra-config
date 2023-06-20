@@ -1,0 +1,6 @@
+---
+- name: Disable Swap
+  hosts: all
+  become: true
+  roles:
+    - disable_swap

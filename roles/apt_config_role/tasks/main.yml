@@ -1,0 +1,24 @@
+---
+- name: Copy APT configuration file
+  copy:
+    content: |
+      # This file is managed remotely, all changes will be lost
+      APT::Periodic::Unattended-Upgrade "0";
+      APT::Periodic::Update-Package-Lists "1";
+      APT::Periodic::Download-Upgradeable-Packages "0";
+      APT::Periodic::Download-Upgradeable-Packages "0";
+      Acquire::http::Proxy "false";
+    dest: /etc/apt/apt.conf.d/99custom
+    mode: '0644'
+
+- name: Add APT repositories
+  apt_repository:
+    repo: "{{ item.repo }}"
+    state: present
+  loop: "{{ apt_repositories }}"
+
+- name: Install packages
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ apt_packages }}"

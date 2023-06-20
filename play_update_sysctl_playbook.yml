@@ -1,0 +1,6 @@
+---
+- name: Update Sysctl Parameters
+  hosts: all
+  become: true
+  roles:
+    - sysctl_config

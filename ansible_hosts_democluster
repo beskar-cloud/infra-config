@@ -1,7 +1,11 @@
+[all:vars]
+netbase_domain=lab.cz
+
 [hosts:children]
 democluster_controlplane
 democluster_compute
 democluster_all
+k8s-vms
 
 [democluster_all:children]
 democluster_controlplane_hw
@@ -20,3 +24,12 @@ controlplane-[001:003].priv.cld.democluster.dev ansible_host="{{ ip_mgmt }}"
 cln-[14:18].priv.cld.democluster.dev ansible_host="{{ ip_mgmt }}"
 cln-[20:24].priv.cld.democluster.dev ansible_host="{{ ip_mgmt }}"
 cln-[26:28].priv.cld.democluster.dev ansible_host="{{ ip_mgmt }}"
+
+[k8s-vms]
+cmp-1  ansible_host=10.2.0.82
+cmp-2  ansible_host=10.2.0.168
+
+
+[all]
+cmp-1  ansible_host=10.2.0.82
+cmp-2  ansible_host=10.2.0.168

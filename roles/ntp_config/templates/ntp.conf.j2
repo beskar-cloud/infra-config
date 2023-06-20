@@ -1,0 +1,12 @@
+# NTP Servers
+{% for server in ntp_servers %}
+server {{ server }}
+{% endfor %}
+
+# NTP Daemon
+{{ ntp_daemon }}
+
+# NTP Timezone
+{{ ntp_timezone }}
+
+# Other NTP configuration options...

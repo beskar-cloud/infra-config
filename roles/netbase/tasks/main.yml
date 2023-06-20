@@ -1,0 +1,26 @@
+# roles/update_hosts/tasks/main.yml
+- name: Add 127.0.1.1 entry to /etc/hosts file
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    line: "127.0.1.1 {{ ansible_hostname }}.lab.cz {{ ansible_hostname }}"
+    state: present
+    insertafter: EOF
+    create: yes
+
+- name: Add custom entry to /etc/hosts file
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    line: "{{ custom_host_entries }}"
+    state: present
+    insertafter: EOF
+    create: yes
+
+- name: Add host entries to /etc/hosts file
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    line: "{{ hostvars[item].ansible_host }} {{ item }}.{{netbase_domain}} {{ item }}"
+    state: present
+    insertafter: EOF
+    create: yes
+  loop: "{{ groups['hosts'] }}"
+

@@ -1,0 +1,6 @@
+---
+- name: Configure Libvirt
+  hosts: all
+  become: true
+  roles:
+    - libvirt 

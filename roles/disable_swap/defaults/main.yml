@@ -1,0 +1,10 @@
+---
+mount_devices:
+  - path: 'none'
+    state: 'absent'
+    src: '/swap.img'
+  - path: 'none'
+    state: 'absent'
+    src: '/swapfile'
+
+swapfile_files: []

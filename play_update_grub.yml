@@ -1,0 +1,6 @@
+---
+- name: Update GRUB Configuration
+  hosts: all
+  become: true
+  roles:
+    - update_grub
