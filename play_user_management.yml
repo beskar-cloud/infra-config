@@ -1,0 +1,7 @@
+---
+- name: Apply user_management role
+  hosts: hosts
+  connection: ssh
+  roles:
+    - { role: cli_validation, tags: ['always'] }
+    - { role: user_management, tags: ['always']}

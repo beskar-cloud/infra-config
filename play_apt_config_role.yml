@@ -1,0 +1,7 @@
+---
+- name: Manage apt_config 
+  hosts: hosts
+  become: true
+  roles:
+    - apt_config_role
+

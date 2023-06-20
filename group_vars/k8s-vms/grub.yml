@@ -1,0 +1,10 @@
+---
+grub_config:
+  cmdline_linux_default:
+    - 'iommu=pt'
+    - 'intel_iommu=on'
+    - 'default_hugepagesz=1G'
+    - 'transparent_hugepage=never'
+    - 'hugepages=20'
+    - 'hugepagesz=1G'
+nr_hugepages: 25

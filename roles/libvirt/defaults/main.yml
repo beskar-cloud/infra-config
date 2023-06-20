@@ -1,0 +1,8 @@
+---
+libvirtd_enabled: true
+
+libvirt_packages:
+  - libvirt-clients
+  - qemu-utils
+  - qemu-kvm
+  - libvirt-daemon-system

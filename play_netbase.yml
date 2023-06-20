@@ -1,0 +1,8 @@
+- name: Update /etc/hosts file on hosts
+  hosts: hosts
+  become: true
+  tasks:
+    - name: Include netbase role
+      include_role:
+        name: netbase
+
