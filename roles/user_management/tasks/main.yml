@@ -1,0 +1,46 @@
+---
+- name: Create admins group
+  group:
+    name: admins
+    state: present
+
+- name: Allow 'admins' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%admins'
+    line: '%admins ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+  async: 45
+  poll: 0
+
+- name: Add users
+  user:
+    name: "{{ item.name }}"
+    shell: "{{ item.shell }}"
+    groups: admins
+    append: yes
+    state: "{{ item.state }}"
+    createhome: yes
+  with_items:
+    - "{{ system_users__accounts }}"
+
+- name: Set authorized key
+  authorized_key:
+    user: "{{ item.name }}"
+    state: "{{ item.state }}"
+    key: "{{ item.sshkeys }}"
+  when: "'{{ item.state }}' == 'present'"
+  with_items:
+    - "{{ system_users__accounts }}"
+  async: 45
+  poll: 0
+
+- name: Delete user directory if user state is 'absent'
+  file:
+    path: "/home/{{ item.name }}"
+    state: absent
+  with_items:
+    - "{{ system_users__accounts }}"
+  when: item.state == 'absent'
+  become: true
