@@ -1,0 +1,18 @@
+---
+- name: Disable swap in fstab
+  lineinfile:
+    path: /etc/fstab
+    regexp: '^/swap.img'
+    state: absent
+  become: true
+
+- name: Disable swap file in fstab
+  lineinfile:
+    path: /etc/fstab
+    regexp: '^/swapfile'
+    state: absent
+  become: true
+
+- name: Disable swap by turning it off
+  command: swapoff -a
+  become: true
