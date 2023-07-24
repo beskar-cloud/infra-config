@@ -1,6 +1,6 @@
 ---
 - name: Configure Libvirt
-  hosts: all
+  hosts: hosts
   become: true
   roles:
     - { role: cli_validation, tags: ['always'] }
