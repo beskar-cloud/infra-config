@@ -1,0 +1,7 @@
+---
+- name: Manage apt_config 
+  hosts: hosts
+  become: true
+  roles:
+    - { role: cli_validation, tags: ['always'] }
+    - { role: apt_config, tags: ['always']}

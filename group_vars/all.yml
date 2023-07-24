@@ -51,6 +51,28 @@ sysctl_parameters: |
   vm.vfs_cache_pressure = 50
   vm.zone_reclaim_mode = 0
   fs.aio-max-nr = 26214
+
+apt_config_content: |
+  # This file is managed remotely, all changes will be lost
+  APT::Periodic::Unattended-Upgrade "0";
+  APT::Periodic::Update-Package-Lists "1";
+  APT::Periodic::Download-Upgradeable-Packages "0";
+  APT::Periodic::Download-Upgradeable-Packages "0";
+  Acquire::http::Proxy "false";
+
+#Custom apt repositories
+apt_repositories:
+  - repo: 'deb http://packages.itera.io/ubuntu jammy-backports main restricted universe multiverse'
+  - repo: 'deb http://packages.itera.io/ubuntu-security jammy-security main restricted universe multiverse'
+  - repo: 'deb http://packages.itera.io/ubuntu jammy-updates main restricted universe multiverse'
+  - repo: 'deb http://packages.itera.io/ubuntu jammy main restricted universe multiverse'
+
+apt_packages:
+  - linux-tools-common
+  - linux-cloud-tools-generic
+  - linux-tools-generic
+  - numactl
+
 # mail configuration
 admin_mail: "cloud@team.dev"
 
