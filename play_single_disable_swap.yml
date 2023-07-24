@@ -1,0 +1,8 @@
+---
+- name: Disable Swap
+  hosts: hosts
+  become: true
+  roles:
+    - { role: cli_validation, tags: ['always'] }
+    - { role: disable_swap, tags: ['always']}
+
