@@ -1,0 +1,24 @@
+---
+- name: Install libvirt packages
+  package:
+    name: "{{ libvirt_packages }}"
+    state: present
+  become: true
+
+- name: Enable libvirtd service
+  service:
+    name: libvirtd
+    enabled: "{{ libvirtd_enabled }}"
+    state: started
+  become: true
+
+- name: Libvirtd qemu.conf host configuration
+  blockinfile:
+    path: /etc/libvirt/qemu.conf
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - DO NOT EDIT"
+    block: |
+      {% for key, value in libvirtd_qemu_host_configuration.items() %}
+      {{ key }} = {% if value is string %}"{{ value }}"{% else %}{{ value }}{% endif %}
+      {% endfor %}
+  notify: Restart libvirtd service
+  become: true

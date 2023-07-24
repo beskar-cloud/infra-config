@@ -1,0 +1,6 @@
+---
+machine_role:
+  - "virtual_machine"
+
+libvirtd_qemu_host_configuration:
+  security_driver: "none"
