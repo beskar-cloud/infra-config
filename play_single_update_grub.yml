@@ -1,6 +1,7 @@
 ---
 - name: Update GRUB Configuration
-  hosts: all
+  hosts: hosts
   become: true
   roles:
-    - update_grub
+    - { role: cli_validation, tags: ['always'] }
+    - { role: update_grub, tags: ['always']}

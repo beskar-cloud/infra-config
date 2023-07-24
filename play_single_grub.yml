@@ -5,5 +5,5 @@
   connection: ssh
   roles:
     # Validate
-    - { role: cli_validation, tags: ['always'] }
-    - { role: update_grub, tags: ['always']}
+    - { role: grub}
+
