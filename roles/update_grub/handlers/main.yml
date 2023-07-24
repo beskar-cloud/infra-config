@@ -1,0 +1,5 @@
+---
+- name: Update GRUB
+  systemd:
+    name: grub-common
+    state: restarted
