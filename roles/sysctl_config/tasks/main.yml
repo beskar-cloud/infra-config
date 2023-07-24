@@ -1,0 +1,17 @@
+---
+- name: Creating kernel tunning file
+  file:
+    path: "/etc/sysctl.d/10-kernel-tunning.conf"
+    state: touch
+
+- name: Add tunning configuration
+  copy:
+    dest: "/etc/sysctl.d/10-kernel-tunning.conf"
+    mode: 0644
+    content: "{{ sysctl_parameters }}"
+
+- name: Apply kernel parameters if they were modified
+  ansible.builtin.shell: |
+    sysctl -p /etc/sysctl.d/10-kernel-tunning.conf
+  args:
+    executable: 'bash'
