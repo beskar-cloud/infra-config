@@ -14,21 +14,22 @@ Before using this role, ensure the following requirements are met:
 
 Role Variables
 --------------
-The `update_grub` role utilizes the following variables defined in custom host group `group_vars/k8s-vms/grub.yml` to update the grub config on specific group of servers depending on host usage:
+
+| Variable                            | Required | Default                                                                                                                   | Comments |
+|-------------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------|----------|
+| `grub_config.cmdline_linux_default` |    No    | `['iommu=pt', 'intel_iommu=on', 'default_hugepagesz=2M', 'transparent_hugepage=never', 'hugepages=512', 'hugepagesz=2M']` | List of GRUB kernel command line options. You can customize this list to add or modify kernel command line options for GRUB. |
 
 ```
 grub_config:
   cmdline_linux_default:
     - 'iommu=pt'
     - 'intel_iommu=on'
-    - 'default_hugepagesz=1G'
+    - 'default_hugepagesz=2M'
     - 'transparent_hugepage=never'
-    - 'hugepages=20'
-    - 'hugepagesz=1G'
+    - 'hugepages=512'
+    - 'hugepagesz=2M'
 
-nr_hugepages: 25
 ```
 
 The `grub_config` variable allows you to specify various parameters to be added to the `GRUB_CMDLINE_LINUX_DEFAULT` option in the `/etc/default/grub` file. These parameters are designed to optimize system performance and hardware support.
 
-The `nr_hugepages` variable sets the number of HugePages that will be configured in the `/etc/sysctl.conf` file. HugePages provide significant benefits for certain applications, such as those running on virtual machines or memory-intensive workloads.

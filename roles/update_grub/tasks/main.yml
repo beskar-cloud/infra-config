@@ -1,22 +1,10 @@
 ---
 - name: Update GRUB configuration
-  lineinfile:
-    path: /etc/default/grub
-    regexp: "^GRUB_CMDLINE_LINUX_DEFAULT="
-    line: "GRUB_CMDLINE_LINUX_DEFAULT=\"{{ grub_config.cmdline_linux_default | join(' ') }}\""
+  copy:
+    content: "GRUB_CMDLINE_LINUX_DEFAULT=\"{{ grub_config.cmdline_linux_default | join(' ') }}\""
+    dest: /etc/default/grub.d/99-custom-settings.cfg
   become: true
   notify: Update GRUB
-
-- name: Update sysctl.conf for HugePages configuration
-  lineinfile:
-    path: /etc/sysctl.conf
-    regexp: "^vm.nr_hugepages="
-    line: "vm.nr_hugepages={{ nr_hugepages }}" 
-  become: true
-
-- name: Apply sysctl.conf settings
-  command: sysctl -p
-  become: true
 
 - name: Run update-grub command
   command: update-grub
