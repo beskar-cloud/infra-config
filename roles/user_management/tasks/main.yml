@@ -23,16 +23,16 @@
     state: "{{ item.state }}"
     createhome: yes
   with_items:
-    - "{{ system_users__accounts }}"
+    - "{{ system_users_accounts }}"
 
 - name: Set authorized key
   authorized_key:
     user: "{{ item.name }}"
     state: "{{ item.state }}"
-    key: "{{ item.sshkeys }}"
+    key: "{{ item.sshkey }}"
   when: "'{{ item.state }}' == 'present'"
   with_items:
-    - "{{ system_users__accounts }}"
+    - "{{ system_users_accounts }}"
   async: 45
   poll: 0
 
@@ -41,6 +41,6 @@
     path: "/home/{{ item.name }}"
     state: absent
   with_items:
-    - "{{ system_users__accounts }}"
+    - "{{ system_users_accounts }}"
   when: item.state == 'absent'
   become: true
