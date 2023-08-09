@@ -14,7 +14,13 @@ Before using this role, ensure the following requirements are met:
 
 Role Variables
 --------------
-The `disable_swap` role does not utilize any user-defined variables. It uses the following default variables defined in `roles/disable_swap/defaults/main.yml`:
+
+| Variable         | Required | Default   | Comments                                                                             |
+|------------------|----------|-----------|--------------------------------------------------------------------------------------|
+| mount_devices    | no       | [See below](#default-mount_devices-value)| List of dictionaries specifying swap devices to be disabled in fstab and turned off. Each dictionary should have 'path', 'state', and 'src' keys. |
+| swapfile_files   | no       | []        | List of additional swapfile paths to be disabled.                                    |
+
+### Default mount_devices value
 
 ```
 mount_devices:
@@ -24,6 +30,15 @@ mount_devices:
   - path: 'none'
     state: 'absent'
     src: '/swapfile'
+```
+### Default swapfile_files value
 
+```
 swapfile_files: []
 ```
+
+- The mount_devices list contains dictionaries that define swap devices to be disabled in the /etc/fstab file and turned off using the swapoff command.
+  - The path key specifies the mount path (in this case, 'none' since it's a swap device).
+  - The state key specifies whether the device should be absent or not.
+  - The src key specifies the source path of the swap device.
+- The swapfile_files list allows you to provide additional swapfile paths that need to be disabled. By default, it's an empty list.
