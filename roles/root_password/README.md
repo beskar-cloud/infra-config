@@ -34,5 +34,5 @@ Make sure to replace your_ubuntu_server with the actual hostname or IP address o
 
 Note
 ----
-- Make sure to keep the group_vars/all.yml file secure, as it contains sensitive information.
+- Make sure to keep the `root_password` variable encrypted (for instance via ansible-vault (currently in group_vars/all.yml).
 - Verify that you have proper SSH access and privilege escalation (sudo) rights on the target servers.
