@@ -3,6 +3,22 @@
 common_ssh_keys:
   - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDSS8J5AStswCnf2JQboCyue8JzX5T/Tsg68LasOT3XZkAMelVrjYBIZ/0P858WMTMW5Qc+ebSmbm0eOopuaN9FrZW2ZsaDyzPamAuxseoTkRV+7Oz5NOF0WCYspgLsbMcaQ+F+qrKzMJRLwduhL67inIJVYkgeXY6S1N2wZAEgYUE3jbZrhaGNA1kQf2dJoMtnikrtOB+vyZkLgFRfgjmq+ny5rCM277otFxwCHhm2+jrWtM8lPY6kJ6WcZfg2njdYW3Oda479jMUg28t4pjqmBygKl3MQ9MOVlJkde4Ez5LhTynXMkSPhH5PnzQrfkQMU2YozCNQ2KBiGDdB3Cd2Lqsou32zUk1/sKc+aN1+8jtm+iogpgYxAPwyCh8S/brVbDu9BerowNRMa4Nual/7YKdtwPEClFp34dgV7tvXVcnVF/TtAkJAUtd02Fh9iS2iM9IrC0gkDEBUr0HGY5U83zODf356aVGTE6hs65wsURGAT6z/DvWYZtMLWJB8Y3p7qHGV1N1OHSLDHgjzuhAHI54h8zhjQaiPsH3Yx4324D1ndtJX8DeWkKdzCNARnw8sfIUhCkwbgv0v6ZkDy8yP6jsHjBc89NjB9kNw1dZcnaDLNqGctcCy50BOeciBYC598i0hec2MieoN0Z2E7lbWZps/+0korxtIxp7TzcKfiKw== secureduser@securedhost
 
+system_users_accounts:
+  - name: 'demo1'
+    admin: True
+    shell: '/bin/bash'
+    state: present
+    sshkey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDM/okx/jbbt3/EkUC15ciUc81WpO3vHFqazrS+jPTYKILYa2B07hJVg99nYveNYuEp2BYWYbLULo4YZCnqbB9Kx3gpX0iMwvKzfkvt/M3uWEAm6hx1sT2QZM5sXbDAg/azOk5HBJ9bZGpPQncE9msdnM8TrPnp7zY7ExZqTIloTiPSkNFmZnKU4hxxBQwU8Mo2BKEOjihR0lCoGC8A2aARjJC7dX4p+jmfIg2kcRBUS/5SpAXZTanDM4fPhuvH9GFbJRtt8d6xo7wU40U6lcPXvmgAnCqmk0WCyji74xS1+ToHyvAVFS0MTRKvXV9qNBGFmik3SZUxypnsb3ujQbrOuxbHv+2yAqYVJfv5Yvncq/Ph0WTrSgTLwEmU3M+Gq5zdzDN82JD33UOLJDx04HAjWaO3zIyjRUguU5gMNqDc12wiZ495/0rotG0awaewergaYJJHwudHaWqMzG2+dIuZhBV++Gxpqtf6sdawadssdawwpe4fbjiiMc= root@demo1"
+
+  - name: 'demo2'
+    admin: true
+    shell: '/bin/bash'
+    state: present
+    sshkey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDYVr0FcJcH3bMgS9t69/MNfdGE7l8XkpbwnjgC7oTZ5xuLMB+4uFXu2bIi2GecX13cyFlSl2Z/4wTcNbv3pNDr14ovelLdMMD/ph43cP/0+YDbgFqq7XQrTYPY/rBXsYJx88pPSXAphkIYkHpxyKrH1RzXySjZdb9G3C8uZ9e3UE7YXUrR8aqcgjNZnqK/sE56Diosst0ZM7A8NZzSUtYKtTd/t5BskzIFoz5ZvQ4c+3QOlAddkSiyEJ7rVctiSTEd5Nc4psznfNV4fjXM4QNmt+elEs5xveU2GRM9822QGp57UDhtG+gODvyHpV2ZWe/BmA6iePZ/sdwawrafsfdn5O8OR18Jt= root@demo2"
+
+#Add root account password
+root_password: "your_root_password_here"
+
 common_packages:
   - nano
   - needrestart
@@ -14,6 +30,47 @@ common_packages:
   - traceroute
   - iotop
   - iftop
+
+sysctl_parameters: |
+  fs.file-max = 1000000
+  fs.inotify.max_queued_events = 524288
+  fs.inotify.max_user_instances = 100000
+  fs.inotify.max_user_watches = 100000
+  kernel.nmi_watchdog = 1
+  kernel.pid_max = 4194303
+  kernel.threads-max = 2097152
+  net.core.somaxconn = 32768
+  net.ipv4.tcp_mem = 4096 87380 16777216
+  net.ipv4.tcp_max_syn_backlog = 8192
+  net.ipv4.tcp_rmem = 4096 87380 134217728
+  net.ipv4.tcp_tw_reuse = 1
+  net.ipv4.tcp_wmem = 4096 87380 134217728
+  vm.dirty_background_ratio = 3
+  vm.dirty_ratio = 10
+  vm.min_free_kbytes = 4194303
+  vm.vfs_cache_pressure = 50
+  vm.zone_reclaim_mode = 0
+  fs.aio-max-nr = 26214
+
+apt_config_content: |
+  # This file is managed remotely, all changes will be lost
+  APT::Periodic::Unattended-Upgrade "0";
+  APT::Periodic::Update-Package-Lists "1";
+  APT::Periodic::Download-Upgradeable-Packages "0";
+  APT::Periodic::Download-Upgradeable-Packages "0";
+  Acquire::http::Proxy "false";
+#Custom apt repositories
+apt_repositories:
+  - repo: 'deb http://packages.itera.io/ubuntu jammy-backports main restricted universe multiverse'
+  - repo: 'deb http://packages.itera.io/ubuntu-security jammy-security main restricted universe multiverse'
+  - repo: 'deb http://packages.itera.io/ubuntu jammy-updates main restricted universe multiverse'
+  - repo: 'deb http://packages.itera.io/ubuntu jammy main restricted universe multiverse'
+
+apt_packages:
+  - linux-tools-common
+  - linux-cloud-tools-generic
+  - linux-tools-generic
+  - numactl
 
 # mail configuration
 admin_mail: "cloud@team.dev"
