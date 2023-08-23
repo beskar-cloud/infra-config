@@ -9,8 +9,10 @@
   ansible.builtin.copy:
     content: "GRUB_CMDLINE_LINUX_DEFAULT=\"{{ grub_config.cmdline_linux_default | join(' ') }}\""
     dest: /etc/default/grub.d/99-custom-settings.cfg
+  when: grub_config.cmdline_linux_default is defined
   become: true
   notify: update-grub
+  tags: ['always']
 
 - name: "Flush handlers"
   ansible.builtin.meta: flush_handlers
