@@ -1,0 +1,8 @@
+
+---
+- name: Manage host files
+  hosts: hosts
+  connection: ssh
+  roles:
+    - { role: cli_validation, tags: ['always'] }
+    - { role: manage_host_files, tags: ['always']}

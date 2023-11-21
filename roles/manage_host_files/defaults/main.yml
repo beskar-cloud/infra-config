@@ -1,0 +1,3 @@
+---
+# defaults file for manage_host_files
+files_to_manage: []

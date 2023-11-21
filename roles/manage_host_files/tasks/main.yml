@@ -1,0 +1,15 @@
+---
+- name: Remove files if state is absent
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ files_to_manage }}"
+  when: item.state == 'absent'
+
+- name: Create or update files
+  ansible.builtin.template:
+    src: file_template.j2
+    mode: "{{ item.mode | default('0644') }}"
+    dest: "{{ item.path }}"
+  loop: "{{ files_to_manage }}"
+  when: item.state == 'present'
