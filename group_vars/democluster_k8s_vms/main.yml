@@ -4,3 +4,22 @@ machine_role:
 
 libvirtd_qemu_host_configuration:
   security_driver: "none"
+
+# Create and manage files on the host
+files_to_manage:
+  - path: /etc/rc.local
+    mode: "0755"
+    state: absent
+    content: |
+      #!/bin/sh -e
+
+      sleep 30
+
+  - path: '/etc/demo_file.txt'
+    state: present
+    content: |
+      This is the content for demo_file.txt.
+
+# Remove existing files from the host
+  - path: '/var/lib/demo.txt'
+    state: absent
