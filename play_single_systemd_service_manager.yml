@@ -1,0 +1,7 @@
+---
+- name: Create, enable and disable systemd services
+  hosts: hosts
+  become: yes
+  roles:
+    - { role: cli_validation, tags: ['always']}
+    - { role: systemd_service_manager, tags: ['always']}

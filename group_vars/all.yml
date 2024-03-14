@@ -16,6 +16,38 @@ system_users_accounts:
     state: present
     sshkey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDYVr0FcJcH3bMgS9t69/MNfdGE7l8XkpbwnjgC7oTZ5xuLMB+4uFXu2bIi2GecX13cyFlSl2Z/4wTcNbv3pNDr14ovelLdMMD/ph43cP/0+YDbgFqq7XQrTYPY/rBXsYJx88pPSXAphkIYkHpxyKrH1RzXySjZdb9G3C8uZ9e3UE7YXUrR8aqcgjNZnqK/sE56Diosst0ZM7A8NZzSUtYKtTd/t5BskzIFoz5ZvQ4c+3QOlAddkSiyEJ7rVctiSTEd5Nc4psznfNV4fjXM4QNmt+elEs5xveU2GRM9822QGp57UDhtG+gODvyHpV2ZWe/BmA6iePZ/sdwawrafsfdn5O8OR18Jt= root@demo2"
 
+systemd_units:
+  - name: 'demo_service_1'
+    raw: |
+      [Unit]
+      Description=Always Running Test Service
+
+      [Service]
+      Type=simple
+      ExecStart=/bin/sleep infinity
+
+      [Install]
+      WantedBy=multi-user.target
+    state: 'started'
+    enabled: true
+  - name: 'demo_service_2'
+    raw: |
+      [Unit]
+      Description=Always Running Test Service
+
+      [Service]
+      Type=simple
+      ExecStart=/bin/sleep infinity
+
+      [Install]
+      WantedBy=multi-user.target
+    state: 'started'
+    enabled: true
+
+  - name: 'apparmor'
+    state: 'stopped'
+    enabled: false
+
 #Add root account password
 root_password: "your_root_password_here"
 

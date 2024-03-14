@@ -1,0 +1,23 @@
+---
+- name: Create or update systemd service files
+  template:
+    src: service.j2
+    dest: "/etc/systemd/system/{{ item.name }}.service"
+    mode: 0644
+  loop: "{{ systemd_units }}"
+  when: item.raw is defined
+
+- name: Enable or disable systemd services
+  systemd:
+    name: "{{ item.name }}"
+    state: "{{ item.state | default('started') }}"
+    enabled: "{{ item.enabled | default(true) }}"
+  loop: "{{ systemd_units }}"
+  when: item.raw is not defined
+
+- name: Ensure systemd services are started if required
+  systemd:
+    name: "{{ item.name }}"
+    state: "started"
+  loop: "{{ systemd_units }}"
+  when: item.state == 'started'
