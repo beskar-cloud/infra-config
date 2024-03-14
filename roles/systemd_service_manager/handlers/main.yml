@@ -1,0 +1,13 @@
+---
+- name: Reload systemd
+  systemd:
+    daemon_reload: yes
+  become: true
+
+- name: Start systemd service
+  systemd:
+    name: "{{ item.name }}"
+    state: "started"
+  loop: "{{ systemd_units }}"
+  when: item.state == 'started'
+  become: true
