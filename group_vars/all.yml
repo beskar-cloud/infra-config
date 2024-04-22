@@ -41,7 +41,7 @@ systemd_units:
 
       [Install]
       WantedBy=multi-user.target
-    state: 'started'
+    state: 'absent'
     enabled: true
 
   - name: 'apparmor'

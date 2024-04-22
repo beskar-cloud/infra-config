@@ -22,8 +22,12 @@ Each dictionary contains the following keys:
 
 - `name` (string): The name of the systemd service.
 - `raw` (string): The raw systemd unit configuration for the service.
-- `state` (string): The desired state of the service (`started` or `stopped`).
+- `state` (string): The desired state of the service (`started`, `stopped`, `restarted` and `absent` ).
 - `enabled` (boolean): Whether the service should be enabled (`true` or `false`).
+
+Note:
+-----
+- `state: absent` removes service files from the host
 
 Example:
 --------
@@ -54,7 +58,7 @@ systemd_units:
 
       [Install]
       WantedBy=multi-user.target
-    state: 'started'
+    state: 'absent'
     enabled: true
 
 # Manage existing services
