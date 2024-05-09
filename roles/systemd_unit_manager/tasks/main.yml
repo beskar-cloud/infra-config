@@ -1,23 +1,23 @@
 ---
-- name: Create or update systemd service files
+- name: Generate systemd unit service files for new services
   template:
     src: service.j2
     dest: "/etc/systemd/system/{{ item.name }}.service"
     mode: 0644
   loop: "{{ systemd_units }}"
-  when: item.raw is defined and item.state != 'absent'
+  when: item.configuration is defined and item.state != 'absent'
 
 - name: Manage systemd services
-  systemd:
+  ansible.builtin.systemd:
     name: "{{ item.name }}"
     state: "{{ 'stopped' if item.state == 'stopped' and item.enabled == false else item.state | default('started') }}"
     enabled: "{{ true if item.enabled is not defined else item.enabled }}"
   loop: "{{ systemd_units }}"
   when: item.state != 'absent'
 
-- name: Delete systemd service files for services marked for deletion
+- name: Delete systemd unit service files for services marked for deletion
   block:
-    - systemd:
+    - ansible.builtin.systemd:
         name: "{{ item.name }}"
         state: stopped
         enabled: false

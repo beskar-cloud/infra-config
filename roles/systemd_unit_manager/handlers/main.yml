@@ -1,11 +1,11 @@
 ---
 - name: Reload systemd
-  systemd:
+  ansible.builtin.systemd:
     daemon_reload: yes
   become: true
 
-- name: Start systemd service
-  systemd:
+- name: Start systemd unit
+  ansible.builtin.systemd:
     name: "{{ item.name }}"
     state: "started"
   loop: "{{ systemd_units }}"

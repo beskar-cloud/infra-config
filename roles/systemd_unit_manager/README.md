@@ -1,4 +1,4 @@
-systemd_service_manager
+systemd_unit_manager
 ========================
 
 This Ansible role manages systemd services on target hosts. It enables, disables, and creates new systemd services based on the provided configuration.
@@ -21,7 +21,7 @@ A list of dictionaries containing configurations for systemd services.
 Each dictionary contains the following keys:
 
 - `name` (string): The name of the systemd service.
-- `raw` (string): The raw systemd unit configuration for the service.
+- `configuration` (string): The systemd unit configuration for the service.
 - `state` (string): The desired state of the service (`started`, `stopped`, `restarted` and `absent` ).
 - `enabled` (boolean): Whether the service should be enabled (`true` or `false`).
 
@@ -59,7 +59,7 @@ systemd_units:
       [Install]
       WantedBy=multi-user.target
     state: 'absent'
-    enabled: true
+    enabled: false
 
 # Manage existing services
   - name: 'apparmor'
@@ -74,10 +74,10 @@ Example Playbook
 ----------------
 
 ```
-- name: Create, enable and disable systemd services
+- name: Create, enable and disable systemd units
   hosts: hosts
   become: yes
   roles:
     - { role: cli_validation, tags: ['always']}
-    - { role: systemd_service_manager, tags: ['always']}
+    - { role: systemd_unit_manager, tags: ['always']}
 ```
