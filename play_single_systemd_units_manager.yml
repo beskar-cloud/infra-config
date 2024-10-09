@@ -1,0 +1,7 @@
+---
+- name: Create, enable and disable systemd units
+  hosts: hosts
+  become: yes
+  roles:
+    - { role: cli_validation, tags: ['always']}
+    - { role: systemd_unit_manager, tags: ['always']}

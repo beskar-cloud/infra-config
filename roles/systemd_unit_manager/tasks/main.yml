@@ -1,0 +1,31 @@
+---
+- name: Generate systemd unit service files for new services
+  template:
+    src: service.j2
+    dest: "/etc/systemd/system/{{ item.name }}.service"
+    mode: 0644
+  loop: "{{ systemd_units }}"
+  when: item.configuration is defined and item.state != 'absent'
+
+- name: Manage systemd services
+  ansible.builtin.systemd:
+    name: "{{ item.name }}"
+    state: "{{ 'stopped' if item.state == 'stopped' and item.enabled == false else item.state | default('started') }}"
+    enabled: "{{ true if item.enabled is not defined else item.enabled }}"
+  loop: "{{ systemd_units }}"
+  when: item.state != 'absent'
+
+- name: Delete systemd unit service files for services marked for deletion
+  block:
+    - ansible.builtin.systemd:
+        name: "{{ item.name }}"
+        state: stopped
+        enabled: false
+      loop: "{{ systemd_units }}"
+      when: item.state == 'absent'
+
+    - file:
+        path: "/etc/systemd/system/{{ item.name }}.service"
+        state: absent
+      loop: "{{ systemd_units }}"
+      when: item.state == 'absent'
